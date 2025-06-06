@@ -257,7 +257,9 @@ function GoalCard({ goal }: GoalCardProps) {
           </div>
         </div>
 
-        <p className="text-base-content/70 line-clamp-2">{goal.description}</p>
+        <p className="text-base-content/70 line-clamp-2 h-12">
+          {goal.description}
+        </p>
 
         <div className="flex flex-col gap-2 mt-2">
           <div className="flex items-center gap-2 text-sm text-base-content/70">
