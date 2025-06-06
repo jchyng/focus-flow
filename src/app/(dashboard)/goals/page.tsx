@@ -348,10 +348,8 @@ export default function GoalsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-18">
-        <Header ref={modalRef} />
-        <LookupOptionsBar />
-      </div>
+      <Header ref={modalRef} />
+      <LookupOptionsBar />
       <GoalGrid />
       <Modal
         ref={modalRef}
