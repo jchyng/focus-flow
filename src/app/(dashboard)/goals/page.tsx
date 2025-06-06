@@ -1,6 +1,13 @@
 "use client";
 
-import { Plus, ChevronLeft, ChevronRight } from "lucide-react";
+import { Goal, Status, StatusText } from "@/types/goal";
+import {
+  Plus,
+  ChevronLeft,
+  ChevronRight,
+  Calendar,
+  CheckCircle2,
+} from "lucide-react";
 import { useState } from "react";
 
 enum Period {
@@ -196,11 +203,109 @@ function LookupOptionsBar() {
   );
 }
 
+// TODO: Replace with actual data fetching
+const goals: Goal[] = [
+  {
+    id: "1",
+    title: "프로젝트 완성하기",
+    description: "프로젝트의 모든 기능을 구현하고 배포하기",
+    progress: 60,
+    startDate: "2024-03-01",
+    endDate: "2025-06-15",
+    status: Status.DOING,
+  },
+  {
+    id: "2",
+    title: "포트폴리오 작성",
+    description: "프로젝트 경험과 기술 스택을 정리하여 포트폴리오 작성하기",
+    progress: 100,
+    startDate: "2024-03-15",
+    endDate: "2025-06-03",
+    status: Status.DONE,
+    completedAt: "2024-04-10",
+  },
+];
+
+interface GoalCardProps {
+  goal: Goal;
+}
+
+function getStatusBadgeClass(status: Status): string {
+  switch (status) {
+    case Status.TODO:
+      return "badge badge-ghost";
+    case Status.DOING:
+      return "badge badge-info badge-soft";
+    case Status.DONE:
+      return "badge badge-success badge-soft";
+    default:
+      return "badge badge-ghost";
+  }
+}
+
+function GoalCard({ goal }: GoalCardProps) {
+  return (
+    <div className="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-200">
+      <div className="card-body">
+        <div className="flex justify-between items-start">
+          <h2 className="card-title text-lg">{goal.title}</h2>
+          <div className={getStatusBadgeClass(goal.status)}>
+            {StatusText[goal.status]}
+          </div>
+        </div>
+
+        <p className="text-base-content/70 line-clamp-2">{goal.description}</p>
+
+        <div className="flex flex-col gap-2 mt-2">
+          <div className="flex items-center gap-2 text-sm text-base-content/70">
+            <Calendar size={16} />
+            <span>
+              {goal.startDate} ~ {goal.endDate}
+            </span>
+          </div>
+        </div>
+
+        <div className="mt-4">
+          <div className="flex justify-between text-sm mb-1">
+            <span>Progress</span>
+            <span>{goal.progress}%</span>
+          </div>
+          <progress
+            className="progress progress-primary w-full"
+            value={goal.progress}
+            max="100"
+          />
+        </div>
+
+        <div className="h-6 mt-2">
+          {goal.completedAt && (
+            <div className="flex items-center gap-2 text-sm text-success">
+              <CheckCircle2 size={16} />
+              <span>Completed on {goal.completedAt}</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GoalGrid() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {goals.map((goal) => (
+        <GoalCard key={goal.id} goal={goal} />
+      ))}
+    </div>
+  );
+}
+
 export default function GoalsPage() {
   return (
     <div className="space-y-6">
       <Header />
       <LookupOptionsBar />
+      <GoalGrid />
     </div>
   );
 }
