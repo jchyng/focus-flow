@@ -87,19 +87,21 @@ function PeriodSelector({
 
   return (
     <div className="flex items-center gap-4">
-      <div className="join">
+      <div role="tablist" className="tabs tabs-box">
         <input
-          className="join-item btn btn-outline"
           type="radio"
           name="period"
+          role="tab"
+          className="tab text-primary"
           aria-label="주간"
           checked={period === Period.WEEKLY}
           onChange={() => onPeriodChange(Period.WEEKLY)}
         />
         <input
-          className="join-item btn btn-outline"
           type="radio"
           name="period"
+          role="tab"
+          className="tab text-primary"
           aria-label="월간"
           checked={period === Period.MONTHLY}
           onChange={() => onPeriodChange(Period.MONTHLY)}
@@ -109,7 +111,7 @@ function PeriodSelector({
       {period === Period.MONTHLY && (
         <div className="flex items-center gap-2">
           <button
-            className="btn btn-square btn-outline btn-sm"
+            className="btn btn-square btn-sm btn-ghost"
             onClick={handlePrevMonth}
           >
             <ChevronLeft size={16} />
@@ -118,7 +120,7 @@ function PeriodSelector({
             {yearMonth.replace("-", "년 ") + "월"}
           </span>
           <button
-            className="btn btn-square btn-outline btn-sm"
+            className="btn btn-square btn-sm btn-ghost"
             onClick={handleNextMonth}
           >
             <ChevronRight size={16} />
@@ -137,7 +139,7 @@ interface StatusSelectionProps {
 function StatusSelector({ status, onStatusChange }: StatusSelectionProps) {
   return (
     <select
-      className="select select-bordered w-32"
+      className="select select-bordered w-32 focus:outline-none"
       value={status}
       onChange={(e) =>
         onStatusChange(e.target.value as keyof typeof FilterStatus)
@@ -160,7 +162,7 @@ interface SortSelectionProps {
 function SortSelector({ sortBy, onSortChange }: SortSelectionProps) {
   return (
     <select
-      className="select select-bordered w-32"
+      className="select select-bordered w-32 focus:outline-none"
       value={sortBy}
       onChange={(e) => onSortChange(e.target.value as SortOption)}
     >
@@ -303,8 +305,10 @@ function GoalGrid() {
 export default function GoalsPage() {
   return (
     <div className="space-y-6">
-      <Header />
-      <LookupOptionsBar />
+      <div className="space-y-18">
+        <Header />
+        <LookupOptionsBar />
+      </div>
       <GoalGrid />
     </div>
   );
