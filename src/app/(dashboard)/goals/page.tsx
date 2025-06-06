@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
+import Modal from "@/components/Modal";
 
 enum Period {
   WEEKLY = "weekly",
@@ -53,7 +54,11 @@ function Header() {
       <h1 className="text-3xl font-bold text-base-content">목표 관리</h1>
       <button
         className="btn btn-primary gap-2"
-        onClick={() => alert("모달 추가 예정")}
+        onClick={() =>
+          (
+            document.getElementById("modal123") as HTMLDialogElement
+          )?.showModal()
+        }
       >
         <Plus /> 목표 추가
       </button>
@@ -313,6 +318,13 @@ export default function GoalsPage() {
         <LookupOptionsBar />
       </div>
       <GoalGrid />
+      <Modal
+        modalName={"modal123"}
+        actionName={"저장"}
+        onClose={() => console.log("닫기")}
+      >
+        <div>모달입니다</div>
+      </Modal>
     </div>
   );
 }
