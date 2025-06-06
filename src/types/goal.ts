@@ -4,7 +4,7 @@ export enum Status {
   DONE = "done",
 }
 
-export const StatusText: Record<Status, string> = {
+export const StatusText = {
   [Status.TODO]: "대기중",
   [Status.DOING]: "진행중",
   [Status.DONE]: "완료",
@@ -17,7 +17,7 @@ export enum Priority {
   HIGH = "high",
 }
 
-export const PriorityText: Record<Priority, string> = {
+export const PriorityText = {
   [Priority.NONE]: "없음",
   [Priority.LOW]: "낮음",
   [Priority.MEDIUM]: "보통",
