@@ -11,6 +11,7 @@ import {
 import { useState } from "react";
 import Link from "next/link";
 import Modal from "@/components/Modal";
+import { formatYearMonth, calculateDDay } from "@/lib/utils/format";
 
 enum Period {
   WEEKLY = "weekly",
@@ -23,7 +24,7 @@ enum SortOption {
   DUE = "due",
 }
 
-const SortOptionText: Record<SortOption, string> = {
+const SortOptionText = {
   [SortOption.PROGRESS]: "진행률순",
   [SortOption.CREATED]: "생성일순",
   [SortOption.DUE]: "마감일순",
@@ -35,18 +36,11 @@ enum FilterStatus {
   DONE = "done",
 }
 
-const FilterStatusText: Record<FilterStatus, string> = {
+const FilterStatusText = {
   [FilterStatus.ALL]: "전체",
   [FilterStatus.DOING]: "진행중",
   [FilterStatus.DONE]: "완료",
 };
-
-function formatYearMonth(date: Date): string {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-    2,
-    "0"
-  )}`;
-}
 
 function Header() {
   return (
@@ -217,10 +211,10 @@ const goals: Goal[] = [
     id: "1",
     title: "프로젝트 완성하기",
     description: "프로젝트의 모든 기능을 구현하고 배포하기",
-    progress: 60,
+    progress: 0,
     startDate: "2024-03-01",
     endDate: "2025-06-15",
-    status: Status.DOING,
+    status: Status.TODO,
   },
   {
     id: "2",
@@ -232,37 +226,80 @@ const goals: Goal[] = [
     status: Status.DONE,
     completedAt: "2024-04-10",
   },
+  {
+    id: "3",
+    title: "이력서 작성",
+    description: "이력서를 작성하여 채용 정보를 확인하기",
+    progress: 60,
+    startDate: "2024-03-15",
+    endDate: "2025-06-10",
+    status: Status.DOING,
+  },
 ];
 
 interface GoalCardProps {
   goal: Goal;
 }
 
-function getStatusBadgeClass(status: Status): string {
-  switch (status) {
-    case Status.TODO:
-      return "badge badge-ghost";
-    case Status.DOING:
-      return "badge badge-info badge-soft";
-    case Status.DONE:
-      return "badge badge-success badge-soft";
-    default:
-      return "badge badge-ghost";
-  }
-}
-
 function GoalCard({ goal }: GoalCardProps) {
+  const dDay = calculateDDay(goal.endDate);
+  const isCompleted = goal.status === Status.DONE;
+  const isNearDeadline = dDay <= 7 && dDay > 0;
+
+  function getStatusBadgeClass(status: Status): string {
+    switch (status) {
+      case Status.TODO:
+        return "badge badge-ghost";
+      case Status.DOING:
+        return "badge badge-warning badge-soft";
+      case Status.DONE:
+        return "badge badge-success badge-soft";
+      default:
+        return "badge badge-ghost";
+    }
+  }
+
+  function getDDayBadge() {
+    if (isCompleted) {
+      return (
+        <div className="badge badge-outline badge-success">
+          {goal.completedAt}
+        </div>
+      );
+    }
+
+    const dDayText =
+      dDay > 0 ? `D-${dDay}` : dDay < 0 ? `D+${Math.abs(dDay)}` : "D-Day";
+    const badgeColor =
+      dDay <= 0 ? "badge-error" : isNearDeadline ? "badge-error" : "badge-info";
+
+    return (
+      <div className={`badge badge-outline ${badgeColor}`}>{dDayText}</div>
+    );
+  }
+
   return (
-    <div className="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-200">
+    <div
+      className={`card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-200 relative ${
+        isCompleted
+          ? "after:absolute after:inset-0 after:bg-base-content/5 after:pointer-events-none"
+          : ""
+      }`}
+    >
       <div className="card-body">
         <div className="flex justify-between items-start">
           <h2 className="card-title text-lg">{goal.title}</h2>
-          <div className={getStatusBadgeClass(goal.status)}>
-            {StatusText[goal.status]}
+          <div className="flex items-center gap-2">
+            <div className={getStatusBadgeClass(goal.status)}>
+              {StatusText[goal.status]}
+            </div>
+            {getDDayBadge()}
           </div>
         </div>
 
-        <p className="text-base-content/70 line-clamp-2">{goal.description}</p>
+        <p className="text-base-content/70 line-clamp-2 h-12">
+          {goal.description}
+        </p>
 
         <div className="flex flex-col gap-2 mt-2">
           <div className="flex items-center gap-2 text-sm text-base-content/70">
