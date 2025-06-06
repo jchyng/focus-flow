@@ -1,20 +1,16 @@
+import { RefObject } from "react";
+
 interface ModalProps {
-  modalName: string;
+  ref: RefObject<HTMLDialogElement | null>;
   actionName: string;
   onAction?: () => void;
   onClose?: () => void;
   children: React.ReactNode;
 }
 
-function Modal({
-  modalName,
-  actionName,
-  onAction,
-  onClose,
-  children,
-}: ModalProps) {
+function Modal({ ref, actionName, onAction, onClose, children }: ModalProps) {
   return (
-    <dialog id={modalName} className="modal">
+    <dialog ref={ref} className="modal">
       <div className="modal-box">
         {children}
         <div className="modal-action">

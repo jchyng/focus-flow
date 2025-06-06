@@ -8,7 +8,7 @@ import {
   Calendar,
   CheckCircle2,
 } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import Modal from "@/components/Modal";
 import { formatYearMonth, calculateDDay } from "@/lib/utils/format";
@@ -42,17 +42,13 @@ const FilterStatusText = {
   [FilterStatus.DONE]: "완료",
 };
 
-function Header() {
+function Header({ ref }: { ref: React.RefObject<HTMLDialogElement | null> }) {
   return (
     <div className="flex justify-between items-center">
       <h1 className="text-3xl font-bold text-base-content">목표 관리</h1>
       <button
         className="btn btn-primary gap-2"
-        onClick={() =>
-          (
-            document.getElementById("modal123") as HTMLDialogElement
-          )?.showModal()
-        }
+        onClick={() => ref.current?.showModal()}
       >
         <Plus /> 목표 추가
       </button>
@@ -348,16 +344,19 @@ function GoalGrid() {
 }
 
 export default function GoalsPage() {
+  const modalRef = useRef<HTMLDialogElement>(null);
+
   return (
     <div className="space-y-6">
       <div className="space-y-18">
-        <Header />
+        <Header ref={modalRef} />
         <LookupOptionsBar />
       </div>
       <GoalGrid />
       <Modal
-        modalName={"modal123"}
+        ref={modalRef}
         actionName={"저장"}
+        onAction={() => console.log("저장")}
         onClose={() => console.log("닫기")}
       >
         <div>모달입니다</div>
