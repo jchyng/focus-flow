@@ -59,7 +59,6 @@ function Header({ title }: { title: string }) {
           >
             <li>
               <button onClick={() => alert("수정 기능은 구현 예정입니다.")}>
-                {" "}
                 <Pencil size={16} /> 수정
               </button>
             </li>
@@ -68,7 +67,6 @@ function Header({ title }: { title: string }) {
                 className="text-error"
                 onClick={() => alert("삭제 기능은 구현 예정입니다.")}
               >
-                {" "}
                 <Trash size={16} /> 삭제
               </button>
             </li>
