@@ -47,7 +47,7 @@ export const PriorityInfo = {
     className: "badge badge-warning badge-soft",
   },
   [Priority.HIGH]: {
-    text: "🐞긴급",
+    text: "🚨긴급",
     className: "badge badge-error badge-soft",
   },
 } as const;

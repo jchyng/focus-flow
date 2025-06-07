@@ -59,7 +59,6 @@ function Header({ title }: { title: string }) {
           >
             <li>
               <button onClick={() => alert("수정 기능은 구현 예정입니다.")}>
-                {" "}
                 <Pencil size={16} /> 수정
               </button>
             </li>
@@ -68,7 +67,6 @@ function Header({ title }: { title: string }) {
                 className="text-error"
                 onClick={() => alert("삭제 기능은 구현 예정입니다.")}
               >
-                {" "}
                 <Trash size={16} /> 삭제
               </button>
             </li>
@@ -79,17 +77,19 @@ function Header({ title }: { title: string }) {
   );
 }
 
+interface GoalInfoProps {
+  description: string;
+  progress: number;
+  startDate: string;
+  endDate: string;
+}
+
 function GoalInfo({
   description,
   progress,
   startDate,
   endDate,
-}: {
-  description: string;
-  progress: number;
-  startDate: string;
-  endDate: string;
-}) {
+}: GoalInfoProps) {
   return (
     <div className="card bg-base-100 shadow-lg">
       <div className="card-body">
@@ -119,7 +119,11 @@ function GoalInfo({
   );
 }
 
-function TaskCard({ task }: { task: Task }) {
+interface TaskCardProps {
+  task: Task;
+}
+
+function TaskCard({ task }: TaskCardProps) {
   const {
     attributes,
     listeners,
@@ -177,15 +181,13 @@ function TaskCard({ task }: { task: Task }) {
   );
 }
 
-function TaskColumn({
-  title,
-  tasks,
-  status,
-}: {
+interface TaskColumnProps {
   title: string;
   tasks: Task[];
   status: Status;
-}) {
+}
+
+function TaskColumn({ title, tasks, status }: TaskColumnProps) {
   const { setNodeRef } = useDroppable({
     id: status,
   });
@@ -240,7 +242,11 @@ function TaskColumn({
   );
 }
 
-function TaskBoard({ tasks: initialTasks }: { tasks: Task[] }) {
+interface TaskBoardProps {
+  tasks: Task[];
+}
+
+function TaskBoard({ tasks: initialTasks }: TaskBoardProps) {
   const [tasks, setTasks] = useState(initialTasks);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
