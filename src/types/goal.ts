@@ -4,25 +4,53 @@ export enum Status {
   DONE = "done",
 }
 
-export const StatusText = {
-  [Status.TODO]: "대기중",
-  [Status.DOING]: "진행중",
-  [Status.DONE]: "완료",
-};
+export const StatusInfo = {
+  [Status.TODO]: {
+    text: "대기",
+    description: "아직 시작하지 않은 작업",
+    bgClassName: "bg-base-100",
+    titleClassName: "text-base-content/70",
+    className: "badge badge-info badge-soft",
+    dotColor: "bg-base-content/50",
+  },
+  [Status.DOING]: {
+    text: "진행",
+    description: "현재 진행 중인 작업",
+    bgClassName: "bg-base-100",
+    titleClassName: "text-warning",
+    className: "badge badge-secondary badge-soft",
+    dotColor: "bg-warning/80",
+  },
+  [Status.DONE]: {
+    text: "완료",
+    description: "완료된 작업",
+    bgClassName: "bg-base-100",
+    titleClassName: "text-success",
+    className: "badge badge-success badge-soft",
+    dotColor: "bg-success/80",
+  },
+} as const;
 
 export enum Priority {
-  NONE = "none",
   LOW = "low",
   MEDIUM = "medium",
   HIGH = "high",
 }
 
-export const PriorityText = {
-  [Priority.NONE]: "없음",
-  [Priority.LOW]: "낮음",
-  [Priority.MEDIUM]: "보통",
-  [Priority.HIGH]: "높음",
-};
+export const PriorityInfo = {
+  [Priority.LOW]: {
+    text: "☕여유",
+    className: "badge badge-ghost badge-soft",
+  },
+  [Priority.MEDIUM]: {
+    text: "💡중요",
+    className: "badge badge-warning badge-soft",
+  },
+  [Priority.HIGH]: {
+    text: "🐞긴급",
+    className: "badge badge-error badge-soft",
+  },
+} as const;
 
 export interface Task {
   id: string;

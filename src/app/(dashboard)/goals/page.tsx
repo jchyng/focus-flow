@@ -1,6 +1,6 @@
 "use client";
 
-import { Goal, Status, StatusText } from "@/types/goal";
+import { Goal, Status, StatusInfo } from "@/types/goal";
 import {
   Plus,
   ChevronLeft,
@@ -241,19 +241,6 @@ function GoalCard({ goal }: GoalCardProps) {
   const isCompleted = goal.status === Status.DONE;
   const isNearDeadline = dDay <= 7 && dDay > 0;
 
-  function getStatusBadgeClass(status: Status): string {
-    switch (status) {
-      case Status.TODO:
-        return "badge badge-ghost";
-      case Status.DOING:
-        return "badge badge-warning badge-soft";
-      case Status.DONE:
-        return "badge badge-success badge-soft";
-      default:
-        return "badge badge-ghost";
-    }
-  }
-
   function getDDayBadge() {
     if (isCompleted) {
       return (
@@ -285,8 +272,8 @@ function GoalCard({ goal }: GoalCardProps) {
         <div className="flex justify-between items-start">
           <h2 className="card-title text-lg">{goal.title}</h2>
           <div className="flex items-center gap-2">
-            <div className={getStatusBadgeClass(goal.status)}>
-              {StatusText[goal.status]}
+            <div className={StatusInfo[goal.status].className}>
+              {StatusInfo[goal.status].text}
             </div>
             {getDDayBadge()}
           </div>

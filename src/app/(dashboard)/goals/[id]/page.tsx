@@ -1,8 +1,8 @@
 "use client";
 
-import { ArrowLeft, Timer, Calendar } from "lucide-react";
+import { ArrowLeft, Timer, Calendar, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Status, StatusText, Task, Priority } from "@/types/goal";
+import { Status, StatusInfo, Task, Priority, PriorityInfo } from "@/types/goal";
 
 function Header({ title }: { title: string }) {
   const router = useRouter();
@@ -12,7 +12,7 @@ function Header({ title }: { title: string }) {
       <div className="flex items-center gap-4">
         <button
           className="btn btn-ghost btn-circle"
-          onClick={() => router.back()}
+          onClick={() => router.push("/goals")}
         >
           <ArrowLeft size={24} />
         </button>
@@ -67,39 +67,85 @@ function GoalInfo({
 }
 
 function TaskCard({ task }: { task: Task }) {
-  function getStatusBadgeClass(status: Status): string {
-    switch (status) {
-      case Status.TODO:
-        return "badge badge-ghost";
-      case Status.DOING:
-        return "badge badge-warning badge-soft";
-      case Status.DONE:
-        return "badge badge-success badge-soft";
-      default:
-        return "badge badge-ghost";
-    }
-  }
-
   return (
-    <div className="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-200">
-      <div className="card-body p-4">
-        <div className="flex justify-between items-start">
-          <h3 className="font-medium">{task.title}</h3>
-          <div className={getStatusBadgeClass(task.status)}>
-            {StatusText[task.status]}
+    <div className="card bg-base-100 shadow-sm border-2 border-base-300 rounded-xl hover:shadow-md transition-all duration-200 h-[148px] flex flex-col justify-between">
+      <div className="card-body p-3 pb-2 flex flex-col gap-2">
+        <div className="flex justify-between items-center mb-1">
+          <h3 className="font-semibold text-base line-clamp-1 text-base-content/90">
+            {task.title}
+          </h3>
+          <div
+            className={`${
+              PriorityInfo[task.priority].className
+            } text-xs px-2 py-0.5 rounded-full`}
+          >
+            {PriorityInfo[task.priority].text}
           </div>
         </div>
-        <p className="text-base-content/70 text-sm line-clamp-2 mt-1">
+        <p className="text-base-content/60 text-sm line-clamp-2 mb-1">
           {task.description}
         </p>
         {task.startDate && task.endDate && (
-          <div className="flex items-center gap-2 text-sm text-base-content/70 mt-2">
-            <Calendar size={16} />
+          <div className="flex items-center gap-1 text-xs text-base-content/50 mt-auto">
+            <Calendar size={14} />
             <span>
               {task.startDate} ~ {task.endDate}
             </span>
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+function TaskColumn({
+  title,
+  tasks,
+  status,
+}: {
+  title: string;
+  tasks: Task[];
+  status: Status;
+}) {
+  const handleAddTask = (status: Status) => {
+    alert(
+      `작업 추가 모달은 나중에 구현 예정입니다. (상태: ${StatusInfo[status].text})`
+    );
+  };
+
+  return (
+    <div
+      className={`${StatusInfo[status].bgClassName} border border-base-300 rounded-2xl p-5 min-w-[270px] flex flex-col gap-3 shadow-sm`}
+    >
+      <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center gap-2">
+          <span
+            className={`w-3 h-3 rounded-full ${StatusInfo[status].dotColor}`}
+          ></span>
+          <span
+            className={`font-bold text-base ${StatusInfo[status].titleClassName}`}
+          >
+            {title}
+          </span>
+        </div>
+        <span className="badge badge-ghost badge-sm px-2 py-0.5 rounded-full font-medium text-xs">
+          {tasks.length}
+        </span>
+      </div>
+      <div className="text-xs text-base-content/50 mb-2 pl-1">
+        {StatusInfo[status].description}
+      </div>
+      <div className="flex flex-col gap-3">
+        {tasks.map((task) => (
+          <TaskCard key={task.id} task={task} />
+        ))}
+        <button
+          onClick={() => handleAddTask(status)}
+          className="w-full p-3 border-2 border-dashed border-base-content/20 rounded-xl transition-colors flex items-center justify-center gap-2 text-base-content/50 hover:border-base-content/50 hover:text-base-content/80"
+        >
+          <Plus size={18} />
+          <span className="text-sm font-medium">작업 추가</span>
+        </button>
       </div>
     </div>
   );
@@ -112,30 +158,9 @@ function TaskBoard({ tasks }: { tasks: Task[] }) {
 
   return (
     <div className="grid grid-cols-3 gap-4">
-      <div className="space-y-4">
-        <h2 className="text-lg font-semibold">대기중</h2>
-        <div className="space-y-4">
-          {todoTasks.map((task) => (
-            <TaskCard key={task.id} task={task} />
-          ))}
-        </div>
-      </div>
-      <div className="space-y-4">
-        <h2 className="text-lg font-semibold">진행중</h2>
-        <div className="space-y-4">
-          {doingTasks.map((task) => (
-            <TaskCard key={task.id} task={task} />
-          ))}
-        </div>
-      </div>
-      <div className="space-y-4">
-        <h2 className="text-lg font-semibold">완료</h2>
-        <div className="space-y-4">
-          {doneTasks.map((task) => (
-            <TaskCard key={task.id} task={task} />
-          ))}
-        </div>
-      </div>
+      <TaskColumn title="대기중" tasks={todoTasks} status={Status.TODO} />
+      <TaskColumn title="진행중" tasks={doingTasks} status={Status.DOING} />
+      <TaskColumn title="완료" tasks={doneTasks} status={Status.DONE} />
     </div>
   );
 }
@@ -172,6 +197,15 @@ export default function GoalDetailPage() {
         title: "배포",
         description: "AWS를 사용하여 애플리케이션 배포",
         status: Status.DONE,
+        priority: Priority.LOW,
+        startDate: "2024-05-01",
+        endDate: "2024-05-15",
+      },
+      {
+        id: "4",
+        title: "배포 예정",
+        description: "배포 예정 작업",
+        status: Status.TODO,
         priority: Priority.LOW,
         startDate: "2024-05-01",
         endDate: "2024-05-15",
