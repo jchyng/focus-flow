@@ -77,17 +77,19 @@ function Header({ title }: { title: string }) {
   );
 }
 
+interface GoalInfoProps {
+  description: string;
+  progress: number;
+  startDate: string;
+  endDate: string;
+}
+
 function GoalInfo({
   description,
   progress,
   startDate,
   endDate,
-}: {
-  description: string;
-  progress: number;
-  startDate: string;
-  endDate: string;
-}) {
+}: GoalInfoProps) {
   return (
     <div className="card bg-base-100 shadow-lg">
       <div className="card-body">
@@ -117,7 +119,11 @@ function GoalInfo({
   );
 }
 
-function TaskCard({ task }: { task: Task }) {
+interface TaskCardProps {
+  task: Task;
+}
+
+function TaskCard({ task }: TaskCardProps) {
   const {
     attributes,
     listeners,
@@ -175,15 +181,13 @@ function TaskCard({ task }: { task: Task }) {
   );
 }
 
-function TaskColumn({
-  title,
-  tasks,
-  status,
-}: {
+interface TaskColumnProps {
   title: string;
   tasks: Task[];
   status: Status;
-}) {
+}
+
+function TaskColumn({ title, tasks, status }: TaskColumnProps) {
   const { setNodeRef } = useDroppable({
     id: status,
   });
@@ -238,7 +242,11 @@ function TaskColumn({
   );
 }
 
-function TaskBoard({ tasks: initialTasks }: { tasks: Task[] }) {
+interface TaskBoardProps {
+  tasks: Task[];
+}
+
+function TaskBoard({ tasks: initialTasks }: TaskBoardProps) {
   const [tasks, setTasks] = useState(initialTasks);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
