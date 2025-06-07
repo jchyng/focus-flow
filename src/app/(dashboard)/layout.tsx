@@ -102,7 +102,7 @@ export default function DashboardLayout({
   return (
     <div className="flex" data-theme="light">
       <Sidebar />
-      <main className="flex-1 p-6 mt-10 md:p-8 bg-base-100 mx-auto max-w-7xl">
+      <main className="flex-1 p-6 mt-10 md:p-8 bg-base-100 mx-auto max-w-[1440px]">
         {children}
       </main>
     </div>

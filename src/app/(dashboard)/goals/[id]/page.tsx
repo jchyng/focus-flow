@@ -68,10 +68,10 @@ function GoalInfo({
 
 function TaskCard({ task }: { task: Task }) {
   return (
-    <div className="card bg-base-100 shadow-sm border-2 border-base-300 rounded-xl hover:shadow-md transition-all duration-200 h-[148px] flex flex-col justify-between">
+    <div className="card bg-base-100 shadow-sm border-2 border-base-300 rounded-xl hover:shadow-md transition-all duration-200 h-[130px] flex flex-col justify-between">
       <div className="card-body p-3 pb-2 flex flex-col gap-2">
         <div className="flex justify-between items-center mb-1">
-          <h3 className="font-semibold text-base line-clamp-1 text-base-content/90">
+          <h3 className="card-title text-base font-bold block truncate max-w-[70%] whitespace-nowrap overflow-hidden">
             {task.title}
           </h3>
           <div
@@ -82,7 +82,7 @@ function TaskCard({ task }: { task: Task }) {
             {PriorityInfo[task.priority].text}
           </div>
         </div>
-        <p className="text-base-content/60 text-sm line-clamp-2 mb-1">
+        <p className="text-base-content/60 line-clamp-2 overflow-hidden">
           {task.description}
         </p>
         {task.startDate && task.endDate && (
@@ -176,8 +176,10 @@ export default function GoalDetailPage() {
     tasks: [
       {
         id: "1",
-        title: "프론트엔드 개발",
-        description: "React와 TypeScript를 사용하여 프론트엔드 구현",
+        title:
+          "프론트엔드 개발 프론트엔드 개발 프론트엔드 개발프론트엔드 개발프론트엔드 개발",
+        description:
+          "React와 TypeScript를 사용하여 프론트엔드 구현 React와 TypeScript를 사용하여 프론트엔드 구현 React와 TypeScript를 사용하여 프론트엔드 구현 React와 TypeScript를 사용하여 프론트엔드 구현",
         status: Status.DOING,
         priority: Priority.HIGH,
         startDate: "2024-03-01",

@@ -204,8 +204,10 @@ function LookupOptionsBar() {
 const goals: Goal[] = [
   {
     id: "1",
-    title: "프로젝트 완성하기",
-    description: "프로젝트의 모든 기능을 구현하고 배포하기",
+    title:
+      "프로젝트 완성하기 프로젝트 완성하기 프로젝트 완성하기 프로젝트 완성하기",
+    description:
+      "프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 ",
     progress: 0,
     startDate: "2024-03-01",
     endDate: "2025-06-15",
@@ -270,7 +272,9 @@ function GoalCard({ goal }: GoalCardProps) {
     >
       <div className="card-body">
         <div className="flex justify-between items-start">
-          <h2 className="card-title text-lg">{goal.title}</h2>
+          <h2 className="card-title text-lg font-bold block truncate max-w-[70%] whitespace-nowrap overflow-hidden">
+            {goal.title}
+          </h2>
           <div className="flex items-center gap-2">
             <div className={StatusInfo[goal.status].className}>
               {StatusInfo[goal.status].text}
@@ -279,7 +283,7 @@ function GoalCard({ goal }: GoalCardProps) {
           </div>
         </div>
 
-        <p className="text-base-content/70 line-clamp-2 h-12">
+        <p className="text-base-content/70 line-clamp-2 h-11 overflow-hidden">
           {goal.description}
         </p>
 
