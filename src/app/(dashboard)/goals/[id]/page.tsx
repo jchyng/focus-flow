@@ -103,13 +103,13 @@ function GoalInfo({
 
 function TaskCard({ task }: { task: Task }) {
   return (
-    <div
-      className="card bg-base-100 shadow-sm border-2 border-base-300 rounded-xl hover:shadow-md transition-all duration-200 h-[130px] flex flex-col justify-between cursor-pointer hover:border-primary/60"
-      onClick={() => alert("작업 상세 모달은 구현 예정입니다.")}
-    >
+    <div className="card bg-base-100 shadow-sm border-2 border-base-300 rounded-xl hover:shadow-md transition-all duration-200 h-[130px] flex flex-col justify-between">
       <div className="card-body p-3 pb-2 flex flex-col gap-2">
         <div className="flex justify-between items-center mb-1">
-          <h3 className="card-title text-base font-bold block truncate max-w-[70%] whitespace-nowrap overflow-hidden">
+          <h3
+            className="card-title text-base font-bold block truncate max-w-[70%] whitespace-nowrap overflow-hidden cursor-pointer hover:text-primary"
+            onClick={() => alert("작업 상세 모달은 구현 예정입니다.")}
+          >
             {task.title}
           </h3>
           <div
