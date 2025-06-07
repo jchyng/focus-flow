@@ -1,6 +1,14 @@
 "use client";
 
-import { ArrowLeft, Timer, Calendar, Plus } from "lucide-react";
+import {
+  ArrowLeft,
+  Timer,
+  Calendar,
+  Plus,
+  Pencil,
+  Trash,
+  MoreHorizontal,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Status, StatusInfo, Task, Priority, PriorityInfo } from "@/types/goal";
 
@@ -18,10 +26,37 @@ function Header({ title }: { title: string }) {
         </button>
         <h1 className="text-3xl font-bold text-base-content">{title}</h1>
       </div>
-      <button className="btn btn-primary gap-2">
-        <Timer size={20} />
-        작업 시작하기
-      </button>
+      <div className="flex items-center gap-2">
+        <button className="btn btn-primary gap-2">
+          <Timer size={20} />
+          작업 시작하기
+        </button>
+        <div className="dropdown dropdown-end">
+          <button tabIndex={0} className="btn btn-ghost btn-circle">
+            <MoreHorizontal size={20} />
+          </button>
+          <ul
+            tabIndex={0}
+            className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32 z-[1]"
+          >
+            <li>
+              <button onClick={() => alert("수정 기능은 구현 예정입니다.")}>
+                {" "}
+                <Pencil size={16} /> 수정
+              </button>
+            </li>
+            <li>
+              <button
+                className="text-error"
+                onClick={() => alert("삭제 기능은 구현 예정입니다.")}
+              >
+                {" "}
+                <Trash size={16} /> 삭제
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }
@@ -68,7 +103,10 @@ function GoalInfo({
 
 function TaskCard({ task }: { task: Task }) {
   return (
-    <div className="card bg-base-100 shadow-sm border-2 border-base-300 rounded-xl hover:shadow-md transition-all duration-200 h-[130px] flex flex-col justify-between">
+    <div
+      className="card bg-base-100 shadow-sm border-2 border-base-300 rounded-xl hover:shadow-md transition-all duration-200 h-[130px] flex flex-col justify-between cursor-pointer hover:border-primary/60"
+      onClick={() => alert("작업 상세 모달은 구현 예정입니다.")}
+    >
       <div className="card-body p-3 pb-2 flex flex-col gap-2">
         <div className="flex justify-between items-center mb-1">
           <h3 className="card-title text-base font-bold block truncate max-w-[70%] whitespace-nowrap overflow-hidden">
@@ -169,7 +207,8 @@ export default function GoalDetailPage() {
   // TODO: 실제 데이터로 교체
   const goal = {
     title: "프로젝트 완성하기",
-    description: "프로젝트의 모든 기능을 구현하고 배포하기",
+    description:
+      "프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 ",
     progress: 60,
     startDate: "2024-03-01",
     endDate: "2025-06-15",
