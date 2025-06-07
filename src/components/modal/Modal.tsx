@@ -8,7 +8,7 @@ interface ModalProps {
   name: string;
   actionName: string;
   onAction?: () => void;
-  onClose: () => void;
+  onClose?: () => void;
   className?: string;
   children: React.ReactNode;
 }
