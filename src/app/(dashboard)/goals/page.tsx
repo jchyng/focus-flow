@@ -11,6 +11,8 @@ import {
 import { useState } from "react";
 import Link from "next/link";
 import { formatYearMonth, calculateDDay } from "@/lib/utils/format";
+import { Input, Modal } from "@/components";
+import { useModal } from "@/contexts/ModalContext";
 
 enum Period {
   WEEKLY = "weekly",
@@ -42,15 +44,39 @@ const FilterStatusText = {
 };
 
 function Header() {
+  const { open } = useModal();
+
   return (
     <div className="flex justify-between items-center">
       <h1 className="text-3xl font-bold text-base-content">목표 관리</h1>
       <button
         className="btn btn-primary gap-2"
-        onClick={() => alert("모달 구현 Plz")}
+        onClick={() => open("GoalModal")}
       >
         <Plus /> 목표 추가
       </button>
+      <Modal
+        name={"GoalModal"}
+        actionName={"추가"}
+        onAction={() => console.log("저장")}
+        onClose={() => {
+          close();
+          console.log("닫기");
+        }}
+      >
+        <Input
+          label={"목표 제목"}
+          required={true}
+          placeholder={"목표 제목을 입력해 주세요"}
+        />
+        <Input
+          type={"textarea"}
+          label={"설명"}
+          placeholder={"목표에 대한 설명을 입력해 주세요"}
+        />
+        <Input type={"date"} required={true} label={"시작일"} />
+        <Input type={"date"} required={true} label={"종료일"} />
+      </Modal>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
+import { ModalProvider } from "@/contexts/ModalContext";
 
 export const metadata: Metadata = {
   title: "Focus Flow",
@@ -17,7 +18,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        {children}
+        <ModalProvider>
+          {children}
+          <div id="modal-root"></div>
+        </ModalProvider>
       </body>
     </html>
   );
