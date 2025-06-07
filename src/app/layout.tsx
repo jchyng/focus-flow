@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
-import DarkModeToggle from "@/components/DarkModeToggle";
 
 export const metadata: Metadata = {
   title: "Focus Flow",
@@ -17,9 +16,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body className="flex" data-theme="light">
+      <body>
         {children}
-        <DarkModeToggle />
       </body>
     </html>
   );

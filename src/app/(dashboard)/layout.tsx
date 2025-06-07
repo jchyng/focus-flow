@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ClipboardList, Timer, BarChart3, LucideIcon } from "lucide-react";
+import { ClipboardList, Timer, BarChart3, Settings, LucideIcon } from "lucide-react";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 
 interface MenuLinkProps {
   href: string;
@@ -52,6 +53,12 @@ function Menu() {
         label="통계"
         isActive={pathname.startsWith("/statistics")}
       />
+      <MenuLink
+        href="/settings"
+        icon={Settings}
+        label="설정"
+        isActive={pathname.startsWith("/settings")}
+      />
     </ul>
   );
 }
@@ -100,11 +107,13 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <Sidebar />
-      <main className="flex-1 p-6 mt-10 md:p-8 bg-base-100 mx-auto max-w-[1440px]">
-        {children}
-      </main>
-    </>
+    <ThemeProvider>
+      <div className="flex">
+        <Sidebar />
+        <main className="flex-1 p-6 mt-10 md:p-8 bg-base-100 mx-auto max-w-[1440px]">
+          {children}
+        </main>
+      </div>
+    </ThemeProvider>
   );
 }
