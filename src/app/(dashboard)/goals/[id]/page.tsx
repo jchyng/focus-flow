@@ -11,6 +11,24 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Status, StatusInfo, Task, Priority, PriorityInfo } from "@/types/goal";
+import { useState } from "react";
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  useSensor,
+  useSensors,
+  PointerSensor,
+  useDroppable,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { createPortal } from "react-dom";
 
 function Header({ title }: { title: string }) {
   const router = useRouter();
@@ -102,8 +120,31 @@ function GoalInfo({
 }
 
 function TaskCard({ task }: { task: Task }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: task.id,
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
   return (
-    <div className="card bg-base-100 shadow-sm border-2 border-base-300 rounded-xl hover:shadow-md transition-all duration-200 h-[130px] flex flex-col justify-between">
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="card bg-base-100 shadow-sm border-2 border-base-300 rounded-xl hover:shadow-md transition-all duration-200 h-[130px] flex flex-col justify-between cursor-move"
+    >
       <div className="card-body p-3 pb-2 flex flex-col gap-2">
         <div className="flex justify-between items-center mb-1">
           <h3
@@ -145,6 +186,10 @@ function TaskColumn({
   tasks: Task[];
   status: Status;
 }) {
+  const { setNodeRef } = useDroppable({
+    id: status,
+  });
+
   const handleAddTask = (status: Status) => {
     alert(
       `작업 추가 모달은 나중에 구현 예정입니다. (상태: ${StatusInfo[status].text})`
@@ -153,6 +198,7 @@ function TaskColumn({
 
   return (
     <div
+      ref={setNodeRef}
       className={`${StatusInfo[status].bgClassName} border border-base-300 rounded-2xl p-5 min-w-[270px] flex flex-col gap-3 shadow-sm`}
     >
       <div className="flex items-center justify-between mb-1">
@@ -173,33 +219,114 @@ function TaskColumn({
       <div className="text-xs text-base-content/50 mb-2 pl-1">
         {StatusInfo[status].description}
       </div>
-      <div className="flex flex-col gap-3">
-        {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
-        ))}
-        <button
-          onClick={() => handleAddTask(status)}
-          className="w-full p-3 border-2 border-dashed border-base-content/20 rounded-xl transition-colors flex items-center justify-center gap-2 text-base-content/50 hover:border-base-content/50 hover:text-base-content/80"
-        >
-          <Plus size={18} />
-          <span className="text-sm font-medium">작업 추가</span>
-        </button>
-      </div>
+      <SortableContext
+        items={tasks.map((task) => task.id)}
+        strategy={verticalListSortingStrategy}
+      >
+        <div className="flex flex-col gap-3">
+          {tasks.map((task) => (
+            <TaskCard key={task.id} task={task} />
+          ))}
+          <button
+            onClick={() => handleAddTask(status)}
+            className="w-full p-3 border-2 border-dashed border-base-content/20 rounded-xl transition-colors flex items-center justify-center gap-2 text-base-content/50 hover:border-base-content/50 hover:text-base-content/80"
+          >
+            <Plus size={18} />
+            <span className="text-sm font-medium">작업 추가</span>
+          </button>
+        </div>
+      </SortableContext>
     </div>
   );
 }
 
-function TaskBoard({ tasks }: { tasks: Task[] }) {
+function TaskBoard({ tasks: initialTasks }: { tasks: Task[] }) {
+  const [tasks, setTasks] = useState(initialTasks);
+  const [activeTask, setActiveTask] = useState<Task | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  );
+
   const todoTasks = tasks.filter((task) => task.status === Status.TODO);
   const doingTasks = tasks.filter((task) => task.status === Status.DOING);
   const doneTasks = tasks.filter((task) => task.status === Status.DONE);
 
+  const handleDragStart = (event: DragStartEvent) => {
+    const { active } = event;
+    const task = tasks.find((t) => t.id === active.id);
+    if (task) {
+      setActiveTask(task);
+    }
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    setActiveTask(null);
+
+    if (!over) return;
+
+    const taskId = active.id as string;
+    const overId = over.id as string;
+
+    // 카드가 다른 카드 위에 드롭된 경우
+    const overTask = tasks.find((t) => t.id === overId);
+    if (overTask) {
+      // 같은 컬럼 내에서 순서 변경
+      if (overTask.status === tasks.find((t) => t.id === taskId)?.status) {
+        const oldIndex = tasks.findIndex((t) => t.id === taskId);
+        const newIndex = tasks.findIndex((t) => t.id === overId);
+
+        setTasks((prevTasks) => {
+          const newTasks = [...prevTasks];
+          const [movedTask] = newTasks.splice(oldIndex, 1);
+          newTasks.splice(newIndex, 0, movedTask);
+          return newTasks;
+        });
+        return;
+      }
+
+      // 다른 컬럼으로 이동
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === taskId ? { ...task, status: overTask.status } : task
+        )
+      );
+      return;
+    }
+
+    // 카드가 컬럼에 드롭된 경우
+    const newStatus = overId as Status;
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === taskId ? { ...task, status: newStatus } : task
+      )
+    );
+  };
+
   return (
-    <div className="grid grid-cols-3 gap-4">
-      <TaskColumn title="대기중" tasks={todoTasks} status={Status.TODO} />
-      <TaskColumn title="진행중" tasks={doingTasks} status={Status.DOING} />
-      <TaskColumn title="완료" tasks={doneTasks} status={Status.DONE} />
-    </div>
+    <DndContext
+      sensors={sensors}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
+      <div className="grid grid-cols-3 gap-4">
+        <TaskColumn title="대기중" tasks={todoTasks} status={Status.TODO} />
+        <TaskColumn title="진행중" tasks={doingTasks} status={Status.DOING} />
+        <TaskColumn title="완료" tasks={doneTasks} status={Status.DONE} />
+      </div>
+      {typeof window !== "undefined" &&
+        createPortal(
+          <DragOverlay>
+            {activeTask ? <TaskCard task={activeTask} /> : null}
+          </DragOverlay>,
+          document.body
+        )}
+    </DndContext>
   );
 }
 
@@ -208,7 +335,7 @@ export default function GoalDetailPage() {
   const goal = {
     title: "프로젝트 완성하기",
     description:
-      "프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 ",
+      "프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 ",
     progress: 60,
     startDate: "2024-03-01",
     endDate: "2025-06-15",
