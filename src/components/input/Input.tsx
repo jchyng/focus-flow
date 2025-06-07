@@ -53,7 +53,7 @@ const Input = ({
       ) : (
         <input
           type={type}
-          className={`input w-full `}
+          className={`input w-full`}
           placeholder={placeholder}
           value={value}
           onChange={(e) =>
