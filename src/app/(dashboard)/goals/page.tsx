@@ -127,8 +127,8 @@ function PeriodSelector({
 }
 
 interface StatusSelectionProps {
-  status: keyof typeof FilterStatus;
-  onStatusChange: (status: keyof typeof FilterStatus) => void;
+  status: FilterStatus;
+  onStatusChange: (status: FilterStatus) => void;
 }
 
 function StatusSelector({ status, onStatusChange }: StatusSelectionProps) {
@@ -136,9 +136,7 @@ function StatusSelector({ status, onStatusChange }: StatusSelectionProps) {
     <select
       className="select select-bordered w-32 focus:outline-none"
       value={status}
-      onChange={(e) =>
-        onStatusChange(e.target.value as keyof typeof FilterStatus)
-      }
+      onChange={(e) => onStatusChange(e.target.value as FilterStatus)}
     >
       {Object.entries(FilterStatusText).map(([value, label]) => (
         <option key={value} value={value}>
@@ -176,7 +174,7 @@ function LookupOptionsBar() {
   const [yearMonth, setYearMonth] = useState<string>(
     formatYearMonth(currentDate)
   );
-  const [status, setStatus] = useState<keyof typeof FilterStatus>("ALL");
+  const [status, setStatus] = useState<FilterStatus>(FilterStatus.ALL);
   const [sortBy, setSortBy] = useState<SortOption>(SortOption.PROGRESS);
 
   return (
