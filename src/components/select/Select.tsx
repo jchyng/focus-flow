@@ -1,0 +1,57 @@
+"use client";
+
+import React from "react";
+
+interface SelectProps {
+  options: { value: string; label: string }[];
+  defaultValue?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  label: string;
+  labelVisible?: boolean;
+  required?: boolean;
+  disabled?: boolean;
+  error?: { message: string } | null;
+}
+
+const Select = ({
+  options,
+  defaultValue,
+  value,
+  onChange,
+  label,
+  labelVisible = true,
+  required = false,
+  disabled = false,
+  error: errorProp = null,
+}: SelectProps) => {
+  return (
+    <fieldset className="fieldset">
+      <label
+        className={`fieldset-legend justify-start gap-1 text-[0.9rem]  ${
+          !labelVisible ? "sr-only" : ""
+        }`}
+      >
+        {label}
+        {required ? <span className="text-red-500">*</span> : null}
+      </label>
+      <select
+        defaultValue={defaultValue || value}
+        value={value}
+        onChange={onChange}
+        className="select w-full"
+        disabled={disabled}
+        aria-label={label}
+      >
+        {options?.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+      {errorProp && <p className="label validator-hint">{errorProp.message}</p>}
+    </fieldset>
+  );
+};
+
+export default Select;
