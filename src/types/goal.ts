@@ -7,27 +7,18 @@ export enum Status {
 export const StatusInfo = {
   [Status.TODO]: {
     text: '대기',
-    description: '아직 시작하지 않은 작업',
-    bgClassName: 'bg-base-100',
-    titleClassName: 'text-base-content/70',
-    className: 'badge badge-info badge-soft',
-    dotColor: 'bg-base-content/50',
+    description: '진행할 작업',
+    className: 'badge-neutral',
   },
   [Status.DOING]: {
     text: '진행',
     description: '현재 진행 중인 작업',
-    bgClassName: 'bg-base-100',
-    titleClassName: 'text-warning',
-    className: 'badge badge-secondary badge-soft',
-    dotColor: 'bg-warning/80',
+    className: 'badge-warning',
   },
   [Status.DONE]: {
     text: '완료',
     description: '완료된 작업',
-    bgClassName: 'bg-base-100',
-    titleClassName: 'text-success',
-    className: 'badge badge-success badge-soft',
-    dotColor: 'bg-success/80',
+    className: 'badge-success',
   },
 } as const;
 
