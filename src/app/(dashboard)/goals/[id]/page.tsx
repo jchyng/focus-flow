@@ -1,6 +1,15 @@
 'use client';
 
-import { ArrowLeft, Timer, Calendar, Plus, Pencil, Trash, MoreHorizontal } from 'lucide-react';
+import {
+  ArrowLeft,
+  Timer,
+  Calendar,
+  Plus,
+  Pencil,
+  Trash,
+  MoreHorizontal,
+  Check,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Status, StatusInfo, Task, Priority, PriorityInfo } from '@/types/goal';
 import { useState } from 'react';
@@ -47,6 +56,11 @@ function Header({ title }: { title: string }) {
             <li>
               <button onClick={() => alert('수정 기능은 구현 예정입니다.')}>
                 <Pencil size={16} /> 수정
+              </button>
+            </li>
+            <li>
+              <button onClick={() => alert('수정 기능은 구현 예정입니다.')}>
+                <Check size={16} /> 완료
               </button>
             </li>
             <li>
@@ -161,7 +175,7 @@ function TaskColumn({ title, tasks, status }: TaskColumnProps) {
   });
   const { open } = useModal();
 
-  const handleAddTask = (status: Status) => {
+  const handleAddTask = () => {
     open('TaskModal');
   };
 
@@ -210,7 +224,7 @@ function TaskColumn({ title, tasks, status }: TaskColumnProps) {
             <TaskCard key={task.id} task={task} />
           ))}
           <button
-            onClick={() => handleAddTask(status)}
+            onClick={() => handleAddTask()}
             className="w-full p-3 border-2 border-dashed border-base-content/20 rounded-xl transition-colors flex items-center justify-center gap-2 text-base-content/50 hover:border-base-content/50 hover:text-base-content/80"
           >
             <Plus size={18} />

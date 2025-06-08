@@ -1,7 +1,7 @@
 'use client';
 
-import { Goal, Status, StatusInfo } from '@/types/goal';
-import { Plus, ChevronLeft, ChevronRight, Calendar, CheckCircle2 } from 'lucide-react';
+import { Goal, Status } from '@/types/goal';
+import { Plus, ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
 import { formatYearMonth, calculateDDay } from '@/lib/utils/format';
@@ -32,7 +32,7 @@ enum FilterStatus {
 
 const FilterStatusText = {
   [FilterStatus.ALL]: '전체',
-  [FilterStatus.DOING]: '진행중',
+  [FilterStatus.DOING]: '진행 중',
   [FilterStatus.DONE]: '완료',
 };
 
@@ -166,12 +166,12 @@ function LookupOptionsBar() {
 const goals: Goal[] = [
   {
     id: '1',
-    title: '프로젝트 완성하기 프로젝트 완성하기 프로젝트 완성하기 프로젝트 완성하기',
-    description:
-      '프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 ',
+    title:
+      '프로젝트 완성하기 프로젝트 완성하기 프로젝트 완성하기 프로젝트 완성하기 프로젝트 완성하기 프로젝트 완성하기',
+    description: `프로젝트의 모든 기능을 구현하고 배포하기\n프로젝트의 모든 기능을 구현하고 배포하기\n프로젝트의 모든 기능을 구현하고 배포하기\n프로젝트의 모든 기능을 구현하고 배포하기 `,
     progress: 0,
     startDate: '2024-03-01',
-    endDate: '2025-06-15',
+    endDate: '2025-06-30',
     status: Status.TODO,
   },
   {
@@ -206,60 +206,53 @@ function GoalCard({ goal }: GoalCardProps) {
 
   function getDDayBadge() {
     if (isCompleted) {
-      return (
-        <div className="badge badge-outline badge-success text-[12px]">{goal.completedAt}</div>
-      );
+      return <div className="text-success font-semibold border-0">{goal.completedAt}</div>;
     }
 
     const dDayText = dDay > 0 ? `D-${dDay}` : dDay < 0 ? `D+${Math.abs(dDay)}` : 'D-Day';
-    const badgeColor = dDay <= 0 ? 'badge-error' : isNearDeadline ? 'badge-error' : 'badge-info';
+    const badgeColor =
+      dDay <= 0 ? 'text-red-400' : isNearDeadline ? 'text-red-400' : 'text-zinc-500';
 
-    return <div className={`badge badge-outline ${badgeColor} text-[12px]`}>{dDayText}</div>;
+    return <div className={`font-bold border-0 text-[18px] ${badgeColor}`}>{dDayText}</div>;
   }
 
   return (
     <div
       className={`card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-200 relative ${
         isCompleted
-          ? 'after:absolute after:inset-0 after:bg-base-content/5 after:pointer-events-none'
+          ? 'after:absolute after:inset-0 after:bg-base-content/5 after:pointer-events-none opacity-65'
           : ''
       }`}
     >
-      <div className="card-body">
-        <div className="w-full flex justify-end gap-2 mb-3">
-          <div className={`badge badge-soft text-[12px] ${StatusInfo[goal.status].className}`}>
-            {StatusInfo[goal.status].text}
-          </div>
-          {getDDayBadge()}
-        </div>
-        <h2 className="card-title text-lg font-bold block">{goal.title}</h2>
-
-        <p className="text-base-content/70 line-clamp-2 h-11 overflow-hidden">{goal.description}</p>
-
-        <div className="flex flex-col gap-2 mt-2">
-          <div className="flex items-center gap-2 text-sm text-base-content/70">
-            <Calendar size={16} />
-            <span>
-              {goal.startDate} ~ {goal.endDate}
-            </span>
-          </div>
-        </div>
-
-        <div className="mt-4">
-          <div className="flex justify-between text-sm mb-1">
-            <span>Progress</span>
-            <span>{goal.progress}%</span>
-          </div>
-          <progress className="progress progress-primary w-full" value={goal.progress} max="100" />
-        </div>
-
-        <div className="h-6 mt-2">
-          {goal.completedAt && (
-            <div className="flex items-center gap-2 text-sm text-success">
-              <CheckCircle2 size={16} />
-              <span>Completed on {goal.completedAt}</span>
+      <div className={`card-body h-[400px] justify-between`}>
+        <div className={'flex flex-col gap-3'}>
+          <div className="w-full flex justify-between gap-2 mb-1.5">
+            <div
+              className={`flex items-center justify-start gap-2 text-sm text-base-content/70 mt-0`}
+            >
+              <Calendar size={16} />
+              <span>
+                {goal.startDate} ~ {goal.endDate}
+              </span>
             </div>
-          )}
+            {getDDayBadge()}
+          </div>
+          <h2 className="card-title text-lg font-bold block">{goal.title}</h2>
+
+          <pre className="text-base-content/70 whitespace-pre-wrap">{goal.description}</pre>
+        </div>
+
+        <div>
+          <span className="text-zinc-600 text-[12px] whitespace-nowrap">
+            진행률 {goal.progress}%
+          </span>
+          <div className="flex items-center gap-2 text-sm mt-0.5">
+            <progress
+              className="progress progress-primary w-full"
+              value={goal.progress}
+              max="100"
+            />
+          </div>
         </div>
       </div>
     </div>

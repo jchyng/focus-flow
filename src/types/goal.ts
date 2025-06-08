@@ -7,13 +7,13 @@ export enum Status {
 export const StatusInfo = {
   [Status.TODO]: {
     text: '대기',
-    description: '아직 시작하지 않은 작업',
-    className: 'badge-info',
+    description: '진행할 작업',
+    className: 'badge-neutral',
   },
   [Status.DOING]: {
     text: '진행',
     description: '현재 진행 중인 작업',
-    className: 'badge-secondary',
+    className: 'badge-warning',
   },
   [Status.DONE]: {
     text: '완료',
