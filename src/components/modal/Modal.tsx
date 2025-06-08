@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useModal } from "@/contexts/ModalContext";
-import { useEffect } from "react";
-import ReactDOM from "react-dom";
+import { useModal } from '@/contexts/ModalContext';
+import { useEffect } from 'react';
+import ReactDOM from 'react-dom';
 
 interface ModalProps {
   name: string;
@@ -13,14 +13,7 @@ interface ModalProps {
   children: React.ReactNode;
 }
 
-const Modal = ({
-  name,
-  actionName,
-  onAction,
-  onClose,
-  className = "",
-  children,
-}: ModalProps) => {
+const Modal = ({ name, actionName, onAction, onClose, className = '', children }: ModalProps) => {
   const { name: currentName, close } = useModal();
   const isOpen = currentName === name;
 
@@ -31,14 +24,14 @@ const Modal = ({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         handleClose();
       }
     };
     if (isOpen) {
-      document.addEventListener("keydown", handleKeyDown);
+      document.addEventListener('keydown', handleKeyDown);
     }
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -57,11 +50,7 @@ const Modal = ({
         <div className="flex-1">{children}</div>
         <div className="flex justify-end gap-4 mt-4">
           {actionName && (
-            <button
-              onClick={onAction}
-              className="btn btn-primary"
-              type="button"
-            >
+            <button onClick={onAction} className="btn btn-primary" type="button">
               {actionName}
             </button>
           )}
@@ -71,7 +60,7 @@ const Modal = ({
         </div>
       </div>
     </div>,
-    document.getElementById("modal-root") || document.createElement("div")
+    document.getElementById('modal-root') || document.createElement('div')
   );
 };
 

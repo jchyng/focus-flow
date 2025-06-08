@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
 interface SelectProps {
   options: {
@@ -34,7 +34,7 @@ const Select = ({
     <fieldset className="fieldset">
       <label
         className={`fieldset-legend justify-start gap-1 text-[0.9rem]  ${
-          !labelVisible ? "sr-only" : ""
+          !labelVisible ? 'sr-only' : ''
         }`}
       >
         {label}

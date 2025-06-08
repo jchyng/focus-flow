@@ -1,20 +1,16 @@
-import type { Metadata } from "next";
-import "@/app/globals.css";
-import { ModalProvider } from "@/contexts/ModalContext";
+import type { Metadata } from 'next';
+import '@/app/globals.css';
+import { ModalProvider } from '@/contexts/ModalContext';
 
 export const metadata: Metadata = {
-  title: "Focus Flow",
-  description: "Focus Flow - 목표 달성을 위한 작업 관리 도구",
+  title: 'Focus Flow',
+  description: 'Focus Flow - 목표 달성을 위한 작업 관리 도구',
   icons: {
-    icon: "/favicon.ico",
+    icon: '/favicon.ico',
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
       <body>

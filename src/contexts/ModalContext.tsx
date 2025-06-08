@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from 'react';
 
 const ModalContext = createContext<{
   name: string | null;
   open: (name: string) => void;
   close: () => void;
 }>({
-  name: "",
+  name: '',
   open: () => {},
   close: () => {},
 });

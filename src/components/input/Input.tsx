@@ -1,15 +1,13 @@
-"use client";
+'use client';
 
-import { format, getDay } from "date-fns";
-import React, { ChangeEvent } from "react";
-import { DayPicker } from "react-day-picker";
+import { format, getDay } from 'date-fns';
+import React, { ChangeEvent } from 'react';
+import { DayPicker } from 'react-day-picker';
 
 interface InputProps {
-  type?: "text" | "password" | "email" | "textarea" | "date";
+  type?: 'text' | 'password' | 'email' | 'textarea' | 'date';
   value?: string | Date | null;
-  onChange?: (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | Date
-  ) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | Date) => void;
   label: string;
   labelVisible?: boolean;
   placeholder?: string;
@@ -20,24 +18,24 @@ interface InputProps {
 }
 
 const Input = ({
-  type = "text",
+  type = 'text',
   value,
   onChange,
   label,
   labelVisible = true,
-  placeholder = "",
+  placeholder = '',
   required = false,
   disabled = false,
   readOnly = false,
   error: errorProp = null,
 }: InputProps) => {
-  const isTextarea = type === "textarea";
-  const isDate = type === "date";
+  const isTextarea = type === 'textarea';
+  const isDate = type === 'date';
 
   const calendarFormatter = {
-    formatCaption: (date: Date) => format(date, "yyyy년 MM월"),
+    formatCaption: (date: Date) => format(date, 'yyyy년 MM월'),
     formatWeekdayName: (weekDay: Date) => {
-      const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
+      const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
       return weekdays[getDay(weekDay)];
     },
   };
@@ -46,7 +44,7 @@ const Input = ({
     <fieldset className="fieldset">
       <label
         className={`fieldset-legend justify-start gap-1 text-[0.9rem]  ${
-          !labelVisible ? "sr-only" : ""
+          !labelVisible ? 'sr-only' : ''
         }`}
       >
         {label}
@@ -57,9 +55,7 @@ const Input = ({
           className={`textarea w-full`}
           placeholder={placeholder}
           value={value as string}
-          onChange={(e) =>
-            onChange && onChange(e as ChangeEvent<HTMLTextAreaElement>)
-          }
+          onChange={(e) => onChange && onChange(e as ChangeEvent<HTMLTextAreaElement>)}
           disabled={disabled}
           readOnly={readOnly}
           aria-label={label}
@@ -73,11 +69,9 @@ const Input = ({
             style={{ anchorName: `--rdp-${label}` } as React.CSSProperties}
           >
             {value ? (
-              format(value as Date, "yyyy-MM-dd")
+              format(value as Date, 'yyyy-MM-dd')
             ) : (
-              <span className="text-gray-400">
-                {`${label}을 선택해 주세요`}
-              </span>
+              <span className="text-gray-400">{`${label}을 선택해 주세요`}</span>
             )}
           </button>
           <div
@@ -88,7 +82,7 @@ const Input = ({
           >
             <DayPicker
               className="react-day-picker"
-              mode={"single"}
+              mode={'single'}
               required
               selected={value as Date}
               onSelect={onChange && ((date) => onChange(date as Date))}
@@ -102,9 +96,7 @@ const Input = ({
           className={`input w-full`}
           placeholder={placeholder}
           value={value as string}
-          onChange={(e) =>
-            onChange && onChange(e as ChangeEvent<HTMLInputElement>)
-          }
+          onChange={(e) => onChange && onChange(e as ChangeEvent<HTMLInputElement>)}
           disabled={disabled}
           readOnly={readOnly}
           aria-label={label}
