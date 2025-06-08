@@ -39,7 +39,7 @@ export enum Priority {
 
 export const PriorityInfo = {
   [Priority.LOW]: {
-    text: "☕여유",
+    text: "🐢여유",
     className: "badge badge-ghost badge-soft",
   },
   [Priority.MEDIUM]: {

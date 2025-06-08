@@ -357,21 +357,13 @@ function TaskBoard({ tasks: initialTasks }: TaskBoardProps) {
         <Select
           label={"상태"}
           required
-          options={[
-            { value: Status.TODO, label: "할 일" },
-            { value: Status.DOING, label: "진행 중" },
-            { value: Status.DONE, label: "완료" },
-          ]}
+          options={StatusInfo}
           value={Status.TODO}
         />
         <Select
           label={"우선순위"}
           required
-          options={[
-            { value: Priority.LOW, label: "☕ 여유" },
-            { value: Priority.MEDIUM, label: "💡 중요" },
-            { value: Priority.HIGH, label: "🚨 긴급" },
-          ]}
+          options={PriorityInfo}
           value={Status.TODO}
         />
         <Input label={"시작일"} type="date" />

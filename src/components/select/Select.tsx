@@ -3,7 +3,12 @@
 import React from "react";
 
 interface SelectProps {
-  options: { value: string; label: string }[];
+  options: {
+    [key: string]: {
+      text: string;
+      [key: string]: string;
+    };
+  };
   defaultValue?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -43,9 +48,9 @@ const Select = ({
         disabled={disabled}
         aria-label={label}
       >
-        {options?.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
+        {Object.entries(options)?.map(([key, value]) => (
+          <option key={key} value={key}>
+            {value.text}
           </option>
         ))}
       </select>
