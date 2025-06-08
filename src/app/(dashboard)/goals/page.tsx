@@ -206,13 +206,15 @@ function GoalCard({ goal }: GoalCardProps) {
 
   function getDDayBadge() {
     if (isCompleted) {
-      return <div className="badge badge-outline badge-success">{goal.completedAt}</div>;
+      return (
+        <div className="badge badge-outline badge-success text-[12px]">{goal.completedAt}</div>
+      );
     }
 
     const dDayText = dDay > 0 ? `D-${dDay}` : dDay < 0 ? `D+${Math.abs(dDay)}` : 'D-Day';
     const badgeColor = dDay <= 0 ? 'badge-error' : isNearDeadline ? 'badge-error' : 'badge-info';
 
-    return <div className={`badge badge-outline ${badgeColor}`}>{dDayText}</div>;
+    return <div className={`badge badge-outline ${badgeColor} text-[12px]`}>{dDayText}</div>;
   }
 
   return (
@@ -224,15 +226,13 @@ function GoalCard({ goal }: GoalCardProps) {
       }`}
     >
       <div className="card-body">
-        <div className="flex justify-between items-start">
-          <h2 className="card-title text-lg font-bold block truncate max-w-[70%] whitespace-nowrap overflow-hidden">
-            {goal.title}
-          </h2>
-          <div className="flex items-center gap-2">
-            <div className={StatusInfo[goal.status].className}>{StatusInfo[goal.status].text}</div>
-            {getDDayBadge()}
+        <div className="w-full flex justify-end gap-2 mb-3">
+          <div className={`badge badge-soft text-[12px] ${StatusInfo[goal.status].className}`}>
+            {StatusInfo[goal.status].text}
           </div>
+          {getDDayBadge()}
         </div>
+        <h2 className="card-title text-lg font-bold block">{goal.title}</h2>
 
         <p className="text-base-content/70 line-clamp-2 h-11 overflow-hidden">{goal.description}</p>
 

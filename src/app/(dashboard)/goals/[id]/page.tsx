@@ -162,21 +162,40 @@ function TaskColumn({ title, tasks, status }: TaskColumnProps) {
   const { open } = useModal();
 
   const handleAddTask = (status: Status) => {
-    // alert(
-    //   `작업 추가 모달은 나중에 구현 예정입니다. (상태: ${StatusInfo[status].text})`
-    // );
     open('TaskModal');
+  };
+
+  const getTaskStatusClassName = () => {
+    switch (status) {
+      case Status.TODO:
+        return {
+          dotColor: 'bg-base-content/50',
+          titleClassName: 'text-base-content/70 text-[12px]',
+        };
+      case Status.DOING:
+        return {
+          titleClassName: 'text-warning text-[12px]',
+          dotColor: 'bg-warning/80',
+        };
+      case Status.DONE:
+        return { titleClassName: 'text-success', dotColor: 'bg-success/80' };
+      default:
+        return {
+          dotColor: 'bg-base-content/50',
+          titleClassName: 'text-base-content/70 text-[12px]',
+        };
+    }
   };
 
   return (
     <div
       ref={setNodeRef}
-      className={`${StatusInfo[status].bgClassName} border border-base-300 rounded-2xl p-5 min-w-[270px] flex flex-col gap-3 shadow-sm`}
+      className={`bg-base-100 border border-base-300 rounded-2xl p-5 min-w-[270px] flex flex-col gap-3 shadow-sm`}
     >
       <div className="flex items-center justify-between mb-1">
         <div className="flex items-center gap-2">
-          <span className={`w-3 h-3 rounded-full ${StatusInfo[status].dotColor}`}></span>
-          <span className={`font-bold text-base ${StatusInfo[status].titleClassName}`}>
+          <span className={`w-3 h-3 rounded-full ${getTaskStatusClassName().dotColor}`}></span>
+          <span className={`font-bold text-base ${getTaskStatusClassName().titleClassName}`}>
             {title}
           </span>
         </div>
