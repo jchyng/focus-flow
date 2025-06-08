@@ -29,6 +29,8 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { createPortal } from "react-dom";
+import { useModal } from "@/contexts/ModalContext";
+import { Input, Modal, Select } from "@/components";
 
 function Header({ title }: { title: string }) {
   const router = useRouter();
@@ -191,11 +193,13 @@ function TaskColumn({ title, tasks, status }: TaskColumnProps) {
   const { setNodeRef } = useDroppable({
     id: status,
   });
+  const { open } = useModal();
 
   const handleAddTask = (status: Status) => {
-    alert(
-      `작업 추가 모달은 나중에 구현 예정입니다. (상태: ${StatusInfo[status].text})`
-    );
+    // alert(
+    //   `작업 추가 모달은 나중에 구현 예정입니다. (상태: ${StatusInfo[status].text})`
+    // );
+    open("TaskModal");
   };
 
   return (
@@ -332,6 +336,39 @@ function TaskBoard({ tasks: initialTasks }: TaskBoardProps) {
           </DragOverlay>,
           document.body
         )}
+      <Modal
+        name="TaskModal"
+        actionName={"추가"}
+        onAction={() => console.log("작업 추가 기능은 구현 예정입니다.")}
+        onClose={() =>
+          console.log("작업 추가 모달 닫기 기능은 구현 예정입니다.")
+        }
+      >
+        <Input
+          label={"제목"}
+          required
+          placeholder="작업 제목을 입력해 주세요"
+        />
+        <Input
+          label={"설명"}
+          type="textarea"
+          placeholder="작업에 대한 설명을 입력해 주세요"
+        />
+        <Select
+          label={"상태"}
+          required
+          options={StatusInfo}
+          value={Status.TODO}
+        />
+        <Select
+          label={"우선순위"}
+          required
+          options={PriorityInfo}
+          value={Status.TODO}
+        />
+        <Input label={"시작일"} type="date" />
+        <Input label={"종료일"} type="date" />
+      </Modal>
     </DndContext>
   );
 }
