@@ -1,6 +1,7 @@
 "use client";
 
 import { useTheme } from "@/contexts/ThemeContext";
+import { useState, useEffect } from "react";
 
 const THEMES = [
   "light", "dark", "cupcake", "bumblebee", "emerald", "corporate",
@@ -13,6 +14,15 @@ const THEMES = [
 
 export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div className="container mx-auto">
