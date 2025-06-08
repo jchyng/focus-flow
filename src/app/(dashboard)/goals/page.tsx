@@ -74,8 +74,8 @@ function Header() {
           label={"설명"}
           placeholder={"목표에 대한 설명을 입력해 주세요"}
         />
-        <Input type={"date"} required={true} label={"시작일"} />
-        <Input type={"date"} required={true} label={"종료일"} />
+        <Input type={"date"} label={"시작일"} />
+        <Input type={"date"} label={"종료일"} />
       </Modal>
     </div>
   );
