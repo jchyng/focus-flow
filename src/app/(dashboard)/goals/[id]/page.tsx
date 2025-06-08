@@ -29,7 +29,7 @@ function Header({ title }: { title: string }) {
         <button className="btn btn-ghost btn-circle" onClick={() => router.push('/goals')}>
           <ArrowLeft size={24} />
         </button>
-        <h1 className="text-3xl font-bold">{title}</h1>
+        <h1 className="text-3xl font-bold text-base-content">{title}</h1>
       </div>
       <div className="flex items-center gap-2">
         <button className="btn btn-primary gap-2">
@@ -40,7 +40,10 @@ function Header({ title }: { title: string }) {
           <button tabIndex={0} className="btn btn-ghost btn-circle">
             <MoreHorizontal size={20} />
           </button>
-          <ul tabIndex={0} className="dropdown-content menu p-2 shadow rounded-box w-32">
+          <ul
+            tabIndex={0}
+            className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32 z-[1]"
+          >
             <li>
               <button onClick={() => alert('수정 기능은 구현 예정입니다.')}>
                 <Pencil size={16} /> 수정
@@ -67,26 +70,29 @@ interface GoalInfoProps {
 
 function GoalInfo({ description, progress, startDate, endDate }: GoalInfoProps) {
   return (
-    <div className="card">
+    <div className="card bg-base-100 shadow-lg">
       <div className="card-body">
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 text-base-content/70">
             <Calendar size={20} />
             <span>
               {startDate} ~ {endDate}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <span>진행률</span>
-            <span>{progress}%</span>
+            <span className="text-base-content/70">진행률</span>
+            <span className="font-medium">{progress}%</span>
           </div>
         </div>
 
         <div className="w-full bg-base-200 rounded-full h-2 mb-6">
-          <div className="bg-primary h-2 rounded-full" style={{ width: `${progress}%` }} />
+          <div
+            className="bg-primary h-2 rounded-full transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          />
         </div>
 
-        <p className="leading-relaxed">{description}</p>
+        <p className="text-base-content/80 leading-relaxed">{description}</p>
       </div>
     </div>
   );
@@ -113,7 +119,7 @@ function TaskCard({ task }: TaskCardProps) {
       style={style}
       {...attributes}
       {...listeners}
-      className="card border-2 border-base-300 rounded-xl hover:shadow-md h-[130px] flex flex-col justify-between cursor-move"
+      className="card bg-base-100 shadow-sm border-2 border-base-300 rounded-xl hover:shadow-md transition-all duration-200 h-[130px] flex flex-col justify-between cursor-move"
     >
       <div className="card-body p-3 pb-2 flex flex-col gap-2">
         <div className="flex justify-between items-center mb-1">
@@ -129,9 +135,9 @@ function TaskCard({ task }: TaskCardProps) {
             {PriorityInfo[task.priority].text}
           </div>
         </div>
-        <p className="line-clamp-2 overflow-hidden">{task.description}</p>
+        <p className="text-base-content/60 line-clamp-2 overflow-hidden">{task.description}</p>
         {task.startDate && task.endDate && (
-          <div className="flex items-center gap-1 text-xs mt-auto">
+          <div className="flex items-center gap-1 text-xs text-base-content/50 mt-auto">
             <Calendar size={14} />
             <span>
               {task.startDate} ~ {task.endDate}
@@ -155,14 +161,17 @@ function TaskColumn({ title, tasks, status }: TaskColumnProps) {
   });
   const { open } = useModal();
 
-  const handleAddTask = () => {
+  const handleAddTask = (status: Status) => {
+    // alert(
+    //   `작업 추가 모달은 나중에 구현 예정입니다. (상태: ${StatusInfo[status].text})`
+    // );
     open('TaskModal');
   };
 
   return (
     <div
       ref={setNodeRef}
-      className={`${StatusInfo[status].bgClassName} border border-base-300 rounded-2xl p-5 min-w-[270px] flex flex-col gap-3`}
+      className={`${StatusInfo[status].bgClassName} border border-base-300 rounded-2xl p-5 min-w-[270px] flex flex-col gap-3 shadow-sm`}
     >
       <div className="flex items-center justify-between mb-1">
         <div className="flex items-center gap-2">
@@ -171,19 +180,19 @@ function TaskColumn({ title, tasks, status }: TaskColumnProps) {
             {title}
           </span>
         </div>
-        <span className="badge badge-ghost badge-sm px-2 py-0.5 rounded-full text-xs">
+        <span className="badge badge-ghost badge-sm px-2 py-0.5 rounded-full font-medium text-xs">
           {tasks.length}
         </span>
       </div>
-      <div className="text-xs mb-2 pl-1">{StatusInfo[status].description}</div>
+      <div className="text-xs text-base-content/50 mb-2 pl-1">{StatusInfo[status].description}</div>
       <SortableContext items={tasks.map((task) => task.id)} strategy={verticalListSortingStrategy}>
         <div className="flex flex-col gap-3">
           {tasks.map((task) => (
             <TaskCard key={task.id} task={task} />
           ))}
           <button
-            onClick={handleAddTask}
-            className="w-full p-3 border-2 border-dashed border-base-content/20 rounded-xl flex items-center justify-center gap-2 hover:border-base-content/50 hover:text-base-content/80"
+            onClick={() => handleAddTask(status)}
+            className="w-full p-3 border-2 border-dashed border-base-content/20 rounded-xl transition-colors flex items-center justify-center gap-2 text-base-content/50 hover:border-base-content/50 hover:text-base-content/80"
           >
             <Plus size={18} />
             <span className="text-sm font-medium">작업 추가</span>
