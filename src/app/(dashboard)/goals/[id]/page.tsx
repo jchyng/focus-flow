@@ -106,7 +106,9 @@ function GoalInfo({ description, progress, startDate, endDate }: GoalInfoProps) 
           />
         </div>
 
-        <p className="text-base-content/80 leading-relaxed">{description}</p>
+        <pre className="text-base-content/80 leading-relaxed whitespace-pre-wrap">
+          {description}
+        </pre>
       </div>
     </div>
   );
@@ -337,8 +339,10 @@ export default function GoalDetailPage() {
   // TODO: 실제 데이터로 교체
   const goal = {
     title: '프로젝트 완성하기',
-    description:
-      '프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 ',
+    description: `프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기
+      프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기
+      프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기
+      프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기 프로젝트의 모든 기능을 구현하고 배포하기`,
     progress: 60,
     startDate: '2024-03-01',
     endDate: '2025-06-15',
