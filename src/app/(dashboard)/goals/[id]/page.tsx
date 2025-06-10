@@ -22,6 +22,7 @@ import {
   useSensors,
   PointerSensor,
   useDroppable,
+  DragOverEvent,
 } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -169,9 +170,11 @@ interface TaskColumnProps {
   title: string;
   tasks: Task[];
   status: Status;
+  overId?: string | number | null;
+  activeTaskId?: string;
 }
 
-function TaskColumn({ title, tasks, status }: TaskColumnProps) {
+function TaskColumn({ title, tasks, status, overId, activeTaskId }: TaskColumnProps) {
   const { setNodeRef } = useDroppable({
     id: status,
   });
@@ -223,8 +226,20 @@ function TaskColumn({ title, tasks, status }: TaskColumnProps) {
       <SortableContext items={tasks.map((task) => task.id)} strategy={verticalListSortingStrategy}>
         <div className="flex flex-col gap-3">
           {tasks.map((task) => (
-            <TaskCard key={task.id} task={task} />
+            <div key={task.id} className="relative">
+              {overId === task.id && activeTaskId !== task.id && (
+                <div className="absolute -top-2 left-0 w-full h-2 flex items-center z-10">
+                  <div className="w-full h-1 rounded bg-blue-400" />
+                </div>
+              )}
+              <TaskCard task={task} />
+            </div>
           ))}
+          {overId === status && (
+            <div className="w-full h-2 flex items-center">
+              <div className="w-full h-1 rounded bg-blue-400" />
+            </div>
+          )}
           <button
             onClick={() => handleAddTask()}
             className="w-full p-3 border-2 border-dashed border-base-content/20 rounded-xl transition-colors flex items-center justify-center gap-2 text-base-content/50 hover:border-base-content/50 hover:text-base-content/80"
@@ -245,6 +260,7 @@ interface TaskBoardProps {
 function TaskBoard({ tasks: initialTasks }: TaskBoardProps) {
   const [tasks, setTasks] = useState(initialTasks);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [overId, setOverId] = useState<string | number | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -266,19 +282,23 @@ function TaskBoard({ tasks: initialTasks }: TaskBoardProps) {
     }
   };
 
+  const handleDragOver = (event: DragOverEvent) => {
+    const { over } = event;
+    setOverId(over?.id ?? null);
+  };
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     setActiveTask(null);
+    setOverId(null);
 
     if (!over) return;
 
     const taskId = active.id as string;
     const overId = over.id as string;
 
-    // 카드가 다른 카드 위에 드롭된 경우
     const overTask = tasks.find((t) => t.id === overId);
     if (overTask) {
-      // 같은 컬럼 내에서 순서 변경
       if (overTask.status === tasks.find((t) => t.id === taskId)?.status) {
         const oldIndex = tasks.findIndex((t) => t.id === taskId);
         const newIndex = tasks.findIndex((t) => t.id === overId);
@@ -292,14 +312,12 @@ function TaskBoard({ tasks: initialTasks }: TaskBoardProps) {
         return;
       }
 
-      // 다른 컬럼으로 이동
       setTasks((prevTasks) =>
         prevTasks.map((task) => (task.id === taskId ? { ...task, status: overTask.status } : task))
       );
       return;
     }
 
-    // 카드가 컬럼에 드롭된 경우
     const newStatus = overId as Status;
     setTasks((prevTasks) =>
       prevTasks.map((task) => (task.id === taskId ? { ...task, status: newStatus } : task))
@@ -307,11 +325,34 @@ function TaskBoard({ tasks: initialTasks }: TaskBoardProps) {
   };
 
   return (
-    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+    <DndContext
+      sensors={sensors}
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
+    >
       <div className="grid grid-cols-3 gap-4">
-        <TaskColumn title="대기중" tasks={todoTasks} status={Status.TODO} />
-        <TaskColumn title="진행중" tasks={doingTasks} status={Status.DOING} />
-        <TaskColumn title="완료" tasks={doneTasks} status={Status.DONE} />
+        <TaskColumn
+          title="대기중"
+          tasks={todoTasks}
+          status={Status.TODO}
+          overId={overId}
+          activeTaskId={activeTask?.id}
+        />
+        <TaskColumn
+          title="진행중"
+          tasks={doingTasks}
+          status={Status.DOING}
+          overId={overId}
+          activeTaskId={activeTask?.id}
+        />
+        <TaskColumn
+          title="완료"
+          tasks={doneTasks}
+          status={Status.DONE}
+          overId={overId}
+          activeTaskId={activeTask?.id}
+        />
       </div>
       {typeof window !== 'undefined' &&
         createPortal(
