@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Status, StatusInfo, Task, Priority, PriorityInfo } from '@/types/goal';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -27,8 +27,6 @@ import {
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { createPortal } from 'react-dom';
-import { useModal } from '@/contexts/ModalContext';
-import { Input, Modal, Select } from '@/components';
 
 function Header({ title }: { title: string }) {
   const router = useRouter();
@@ -175,14 +173,29 @@ interface TaskColumnProps {
 }
 
 function TaskColumn({ title, tasks, status, overId, activeTaskId }: TaskColumnProps) {
-  const { setNodeRef } = useDroppable({
-    id: status,
-  });
-  const { open } = useModal();
+  const { setNodeRef } = useDroppable({ id: status });
+  const [showInput, setShowInput] = useState(false);
+  const [inputTitle, setInputTitle] = useState('');
+  const inputRef = useRef<HTMLDivElement>(null);
 
-  const handleAddTask = () => {
-    open('TaskModal');
+  const handleAddTask = () => setShowInput(true);
+  const handleSubmit = () => {
+    if (!inputTitle.trim()) return;
+    alert('저장!');
+    setInputTitle('');
+    setShowInput(false);
   };
+
+  useEffect(() => {
+    if (!showInput) return;
+    function handleClick(e: MouseEvent) {
+      if (inputRef.current && !inputRef.current.contains(e.target as Node)) {
+        setShowInput(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [showInput]);
 
   const getTaskStatusClassName = () => {
     switch (status) {
@@ -209,7 +222,7 @@ function TaskColumn({ title, tasks, status, overId, activeTaskId }: TaskColumnPr
   return (
     <div
       ref={setNodeRef}
-      className={`bg-base-100 border border-base-300 rounded-2xl p-5 min-w-[270px] flex flex-col gap-3 shadow-sm`}
+      className={`bg-base-100 border border-base-300 rounded-2xl p-5 min-w-[270px] flex flex-col justify-between gap-3 shadow-sm h-full`}
     >
       <div className="flex items-center justify-between mb-1">
         <div className="flex items-center gap-2">
@@ -224,7 +237,7 @@ function TaskColumn({ title, tasks, status, overId, activeTaskId }: TaskColumnPr
       </div>
       <div className="text-xs text-base-content/50 mb-2 pl-1">{StatusInfo[status].description}</div>
       <SortableContext items={tasks.map((task) => task.id)} strategy={verticalListSortingStrategy}>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 flex-1">
           {tasks.map((task) => (
             <div key={task.id} className="relative">
               {overId === task.id && activeTaskId !== task.id && (
@@ -240,13 +253,64 @@ function TaskColumn({ title, tasks, status, overId, activeTaskId }: TaskColumnPr
               <div className="w-full h-1 rounded bg-blue-400" />
             </div>
           )}
-          <button
-            onClick={() => handleAddTask()}
-            className="w-full p-3 border-2 border-dashed border-base-content/20 rounded-xl transition-colors flex items-center justify-center gap-2 text-base-content/50 hover:border-base-content/50 hover:text-base-content/80"
-          >
-            <Plus size={18} />
-            <span className="text-sm font-medium">작업 추가</span>
-          </button>
+        </div>
+        <div className="mt-24">
+          {showInput ? (
+            <div
+              ref={inputRef}
+              className="flex items-center gap-2 w-full px-2 py-1 mt-1 mb-0 bg-transparent"
+              style={{ border: 'none', borderRadius: '8px' }}
+            >
+              <button
+                className="p-0 m-0 bg-transparent border-none shadow-none outline-none flex items-center justify-center"
+                style={{ minWidth: 32, height: 32 }}
+                onClick={handleSubmit}
+              >
+                <Plus size={20} className="text-base-content/50" />
+              </button>
+              <input
+                className="flex-1 bg-transparent border-none text-base h-8 px-2"
+                style={{
+                  fontSize: '16px',
+                  lineHeight: '1.5',
+                  minHeight: '40px',
+                  height: '40px',
+                  padding: '0 8px',
+                  boxSizing: 'border-box',
+                  outline: 'none',
+                  boxShadow: 'none',
+                }}
+                value={inputTitle}
+                onChange={(e) => setInputTitle(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleSubmit();
+                }}
+                autoFocus
+                onFocus={(e) => {
+                  e.target.style.outline = 'none';
+                  e.target.style.boxShadow = 'none';
+                }}
+                onBlur={(e) => {
+                  e.target.style.outline = 'none';
+                  e.target.style.boxShadow = 'none';
+                }}
+              />
+            </div>
+          ) : (
+            <button
+              onClick={handleAddTask}
+              className="w-full px-2 py-1 mt-1 mb-0 bg-transparent flex items-center gap-2 text-base-content/50 hover:text-base-content/80"
+              style={{
+                border: 'none',
+                borderRadius: '8px',
+                minHeight: 40,
+                justifyContent: 'flex-start',
+              }}
+            >
+              <Plus size={20} className="text-base-content/50" />
+              <span className="text-base font-normal">Add item</span>
+            </button>
+          )}
         </div>
       </SortableContext>
     </div>
@@ -359,19 +423,6 @@ function TaskBoard({ tasks: initialTasks }: TaskBoardProps) {
           <DragOverlay>{activeTask ? <TaskCard task={activeTask} /> : null}</DragOverlay>,
           document.body
         )}
-      <Modal
-        name="TaskModal"
-        actionName={'추가'}
-        onAction={() => console.log('작업 추가 기능은 구현 예정입니다.')}
-        onClose={() => console.log('작업 추가 모달 닫기 기능은 구현 예정입니다.')}
-      >
-        <Input label={'제목'} required placeholder="작업 제목을 입력해 주세요" />
-        <Input label={'설명'} type="textarea" placeholder="작업에 대한 설명을 입력해 주세요" />
-        <Select label={'상태'} required options={StatusInfo} value={Status.TODO} />
-        <Select label={'우선순위'} required options={PriorityInfo} value={Status.TODO} />
-        <Input label={'시작일'} type="date" />
-        <Input label={'종료일'} type="date" />
-      </Modal>
     </DndContext>
   );
 }
