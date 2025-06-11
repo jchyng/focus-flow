@@ -7,8 +7,8 @@ import { ThemeProvider } from '@/contexts/ThemeContext';
 
 function Logo() {
   return (
-    <Link href="/" className="flex p-6">
-      <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+    <Link href="/" className="flex p-4">
+      <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
         Focus Flow
       </h1>
     </Link>
@@ -33,7 +33,7 @@ function MenuLink({ href, icon: Icon, label, isActive }: MenuLinkProps) {
         className={`flex gap-3 hover:bg-base-300/50 relative ${isActive ? activeCn : inactiveCn}`}
       >
         <Icon size={20} />
-        {label}
+        <span className="text-sm">{label}</span>
       </Link>
     </li>
   );
@@ -43,7 +43,7 @@ function Menu() {
   const pathname = usePathname();
 
   return (
-    <ul className="menu menu-lg w-full p-4 gap-2">
+    <ul className="menu menu-sm w-full p-4 gap-2">
       <MenuLink
         href="/goals"
         icon={ClipboardList}
@@ -51,10 +51,10 @@ function Menu() {
         isActive={pathname.startsWith('/goals')}
       />
       <MenuLink
-        href="/pomodoro"
+        href="/focus"
         icon={Timer}
-        label="뽀모도로"
-        isActive={pathname.startsWith('/pomo')}
+        label="집중 타이머"
+        isActive={pathname.startsWith('/focus')}
       />
       <MenuLink
         href="/stat"
@@ -80,22 +80,22 @@ function Profile() {
           <span className="text-lg">CY</span>
         </div>
       </div>
-      <div className="flex flex-col">
+      {/* <div className="flex flex-col">
         <div className="font-bold text-base-content">정찬영</div>
         <div className="text-sm text-base-content/60">example@email.com</div>
-      </div>
+      </div> */}
     </div>
   );
 }
 
 function Sidebar() {
   return (
-    <aside className="flex flex-col min-h-screen w-64 bg-base-200 border-r border-base-300">
+    <aside className="flex flex-col min-h-screen w-54 bg-gradient-to-br from-base-100 via-primary/10 to-base-200/80 ">
       <Logo />
       <div className="flex-1 overflow-y-auto">
         <Menu />
       </div>
-      <Profile />
+      {/* <Profile /> */}
     </aside>
   );
 }
