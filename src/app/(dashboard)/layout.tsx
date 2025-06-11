@@ -51,7 +51,7 @@ function Menu() {
         isActive={pathname.startsWith('/goals')}
       />
       <MenuLink
-        href="/pomo"
+        href="/pomodoro"
         icon={Timer}
         label="뽀모도로"
         isActive={pathname.startsWith('/pomo')}
@@ -76,8 +76,8 @@ function Profile() {
   return (
     <div className="flex items-center gap-3 px-6 py-4 border-t border-base-300">
       <div className="avatar avatar-placeholder">
-        <div className="bg-neutral text-neutral-content rounded-full w-12 ">
-          <span className="text-xl">CY</span>
+        <div className="bg-neutral text-neutral-content rounded-full w-10 ">
+          <span className="text-lg">CY</span>
         </div>
       </div>
       <div className="flex flex-col">

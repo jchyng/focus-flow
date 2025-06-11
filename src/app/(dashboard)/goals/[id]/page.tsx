@@ -134,31 +134,32 @@ function TaskCard({ task }: TaskCardProps) {
       style={style}
       {...attributes}
       {...listeners}
-      className="card bg-base-100 shadow-sm border-2 border-base-300 rounded-xl hover:shadow-md transition-all duration-200 h-[130px] flex flex-col justify-between cursor-move"
+      className="card bg-base-100 shadow-sm border-2 border-base-300 rounded-xl hover:shadow-md transition-all duration-200 flex flex-col justify-between cursor-move"
     >
-      <div className="card-body p-3 pb-2 flex flex-col gap-2">
-        <div className="flex justify-between items-center mb-1">
-          <h3
-            className="card-title text-base font-bold block truncate max-w-[70%] whitespace-nowrap overflow-hidden cursor-pointer hover:text-primary"
-            onClick={() => alert('작업 상세 모달은 구현 예정입니다.')}
-          >
-            {task.title}
-          </h3>
+      <div
+        className="card-body p-3 pb-2 flex flex-col gap-2"
+        onClick={() => alert('작업 상세 모달은 구현 예정입니다.')}
+      >
+        <h3 className="card-title text-sm font-bold block truncate max-w-[70%] whitespace-nowrap overflow-hidden cursor-pointer hover:text-primary">
+          {task.title}
+        </h3>
+        <div className="flex items-center gap-4 mt-1">
+          {task.startDate && task.endDate && (
+            <div className="flex items-center gap-1 text-xs text-base-content/50">
+              <Calendar size={14} />
+              <span>
+                {task.startDate} ~ {task.endDate}
+              </span>
+            </div>
+          )}
           <div
-            className={`${PriorityInfo[task.priority].className} text-xs px-2 py-0.5 rounded-full`}
+            className={`badge badge-soft ${
+              PriorityInfo[task.priority].className
+            } badge-xs text-xs px-2 rounded-full`}
           >
             {PriorityInfo[task.priority].text}
           </div>
         </div>
-        <p className="text-base-content/60 line-clamp-2 overflow-hidden">{task.description}</p>
-        {task.startDate && task.endDate && (
-          <div className="flex items-center gap-1 text-xs text-base-content/50 mt-auto">
-            <Calendar size={14} />
-            <span>
-              {task.startDate} ~ {task.endDate}
-            </span>
-          </div>
-        )}
       </div>
     </div>
   );

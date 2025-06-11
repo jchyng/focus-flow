@@ -30,16 +30,16 @@ export enum Priority {
 
 export const PriorityInfo = {
   [Priority.LOW]: {
-    text: '🐢여유',
-    className: 'badge badge-ghost badge-soft',
+    text: '여유',
+    className: 'badge-ghost',
   },
   [Priority.MEDIUM]: {
-    text: '💡중요',
-    className: 'badge badge-warning badge-soft',
+    text: '중요',
+    className: 'badge-warning',
   },
   [Priority.HIGH]: {
-    text: '🚨긴급',
-    className: 'badge badge-error badge-soft',
+    text: '긴급',
+    className: 'badge-error ',
   },
 } as const;
 
