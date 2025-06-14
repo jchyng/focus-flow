@@ -1,2 +1,18 @@
-@import "tailwindcss";
-@plugin "daisyui";
+@import 'tailwindcss';
+@plugin "daisyui" {
+  themes: all;
+}
+
+* {
+  font-family: 'Pretendard';
+}
+
+.input:focus,
+.input:focus-within,
+.textarea:focus,
+.textarea:focus-within,
+.select:focus,
+.select:focus-within {
+  outline: none;
+  border-color: color-mix(in oklab, var(--color-base-content) 20%, #0000);
+}

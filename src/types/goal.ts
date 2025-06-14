@@ -1,28 +1,47 @@
 export enum Status {
-  TODO = "todo",
-  DOING = "doing",
-  DONE = "done",
+  TODO = 'todo',
+  DOING = 'doing',
+  DONE = 'done',
 }
 
-export const StatusText: Record<Status, string> = {
-  [Status.TODO]: "대기중",
-  [Status.DOING]: "진행중",
-  [Status.DONE]: "완료",
-};
+export const StatusInfo = {
+  [Status.TODO]: {
+    text: '대기',
+    description: '진행할 작업',
+    className: 'badge-neutral',
+  },
+  [Status.DOING]: {
+    text: '진행',
+    description: '현재 진행 중인 작업',
+    className: 'badge-warning',
+  },
+  [Status.DONE]: {
+    text: '완료',
+    description: '완료된 작업',
+    className: 'badge-success',
+  },
+} as const;
 
 export enum Priority {
-  NONE = "none",
-  LOW = "low",
-  MEDIUM = "medium",
-  HIGH = "high",
+  LOW = 'low',
+  MEDIUM = 'medium',
+  HIGH = 'high',
 }
 
-export const PriorityText: Record<Priority, string> = {
-  [Priority.NONE]: "없음",
-  [Priority.LOW]: "낮음",
-  [Priority.MEDIUM]: "보통",
-  [Priority.HIGH]: "높음",
-};
+export const PriorityInfo = {
+  [Priority.LOW]: {
+    text: '여유',
+    className: 'badge-ghost',
+  },
+  [Priority.MEDIUM]: {
+    text: '중요',
+    className: 'badge-warning',
+  },
+  [Priority.HIGH]: {
+    text: '긴급',
+    className: 'badge-error ',
+  },
+} as const;
 
 export interface Task {
   id: string;
