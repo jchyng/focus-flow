@@ -72,21 +72,21 @@ function Menu() {
   );
 }
 
-function Profile() {
-  return (
-    <div className="flex items-center gap-3 px-6 py-4 border-t border-base-300">
-      <div className="avatar avatar-placeholder">
-        <div className="bg-neutral text-neutral-content rounded-full w-10 ">
-          <span className="text-lg">CY</span>
-        </div>
-      </div>
-      {/* <div className="flex flex-col">
-        <div className="font-bold text-base-content">정찬영</div>
-        <div className="text-sm text-base-content/60">example@email.com</div>
-      </div> */}
-    </div>
-  );
-}
+// function Profile() {
+//   return (
+//     <div className="flex items-center gap-3 px-6 py-4 border-t border-base-300">
+//       <div className="avatar avatar-placeholder">
+//         <div className="bg-neutral text-neutral-content rounded-full w-10 ">
+//           <span className="text-lg">CY</span>
+//         </div>
+//       </div>
+//       {/* <div className="flex flex-col">
+//         <div className="font-bold text-base-content">정찬영</div>
+//         <div className="text-sm text-base-content/60">example@email.com</div>
+//       </div> */}
+//     </div>
+//   );
+// }
 
 function Sidebar() {
   return (

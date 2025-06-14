@@ -9,7 +9,6 @@ interface SelectProps {
       [key: string]: string;
     };
   };
-  defaultValue?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   label: string;
@@ -21,7 +20,6 @@ interface SelectProps {
 
 const Select = ({
   options,
-  defaultValue,
   value,
   onChange,
   label,
@@ -41,7 +39,6 @@ const Select = ({
         {required ? <span className="text-red-500">*</span> : null}
       </label>
       <select
-        defaultValue={defaultValue || value}
         value={value}
         onChange={onChange}
         className="select w-full"
